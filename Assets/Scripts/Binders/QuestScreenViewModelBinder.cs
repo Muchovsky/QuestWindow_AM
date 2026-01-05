@@ -1,5 +1,6 @@
 using Binding;
 using UnityEngine;
+using View;
 using ViewModel;
 
 namespace Binders
@@ -14,6 +15,9 @@ namespace Binders
 
         [SerializeField]
         private Binder m_bronzeQuestBinder;
+        
+        [SerializeField]
+        private BinderContainerView m_container;
 
         protected override void RefreshBindings()
         {
@@ -27,6 +31,12 @@ namespace Binders
 
             if (m_bronzeQuestBinder)
                 m_bronzeQuestBinder.Bindable = questsScreenViewModel?.BronzeQuest;
+            
+            
+            if (m_container == null)
+                return;
+
+            m_container.Bindables = questsScreenViewModel?.VisibleQuests;
         }
     }
 }

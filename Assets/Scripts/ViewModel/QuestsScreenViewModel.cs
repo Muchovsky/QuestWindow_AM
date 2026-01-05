@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Binding;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Model;
@@ -10,6 +12,14 @@ namespace ViewModel
     /// </summary>
     public sealed class QuestsScreenViewModel : ObservableObject, IBindable
     {
+        IReadOnlyList<QuestViewModel> AllQuests { get; }
+        IReadOnlyList<QuestViewModel> m_visibleQuests;
+        public IReadOnlyList<QuestViewModel> VisibleQuests
+        {
+            get => m_visibleQuests;
+            private set => SetProperty(ref m_visibleQuests, value);
+        }
+
         /// <summary>
         /// Gets the view model for the gold quest.
         /// </summary>
@@ -48,6 +58,20 @@ namespace ViewModel
             GoldQuest = new QuestViewModel(goldQuest);
             SilverQuest = new QuestViewModel(silverQuest);
             BronzeQuest = new QuestViewModel(bronzeQuest);
+
+            AllQuests = new List<QuestViewModel>() { GoldQuest, SilverQuest, BronzeQuest };
+
+            VisibleQuests = Array.Empty<QuestViewModel>();
+
+            foreach (var quest in AllQuests)
+                quest.Clicked += OnQuestClicked;
+        }
+
+        void OnQuestClicked()
+        {
+            VisibleQuests = AllQuests
+                .Where(q => q.IsSelected)
+                .ToArray();
         }
     }
 }

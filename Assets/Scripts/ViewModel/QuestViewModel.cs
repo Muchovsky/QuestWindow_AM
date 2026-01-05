@@ -15,6 +15,16 @@ namespace ViewModel
         /// </summary>
         public string Description { get; }
 
+        public event Action Clicked;
+
+        bool m_isSelected;
+
+        public bool IsSelected
+        {
+            get => m_isSelected;
+            private set => SetProperty(ref m_isSelected, value);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestViewModel"/> class.
         /// </summary>
@@ -26,6 +36,12 @@ namespace ViewModel
                 throw new ArgumentNullException(nameof(quest));
 
             Description = quest.Description;
+        }
+
+        public void OnClick()
+        {
+            IsSelected = !IsSelected;
+            Clicked?.Invoke();
         }
     }
 }

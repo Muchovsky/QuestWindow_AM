@@ -11,6 +11,9 @@ namespace View
     {
         [SerializeField]
         private GameObject m_itemPrefab;
+        
+        [SerializeField]
+        Transform itemContainer;
 
         /// <summary>
         /// Gets or sets the collection of bindable objects to display in the container.
@@ -57,7 +60,7 @@ namespace View
         {
             foreach (var bindable in m_bindables)
             {
-                var itemObject = Instantiate(m_itemPrefab, transform);
+                var itemObject = Instantiate(m_itemPrefab, itemContainer);
 
                 var binder = itemObject.GetComponent<Binder>();
                 if (!binder)
@@ -65,6 +68,7 @@ namespace View
                 
                 binder.Bindable = bindable;
                 m_instantiatedItems.Add(itemObject);
+                
             }
         }
     }
